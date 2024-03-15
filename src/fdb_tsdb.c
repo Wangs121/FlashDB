@@ -249,7 +249,7 @@ static fdb_err_t read_sector_info(fdb_tsdb_t db, uint32_t addr, tsdb_sec_info_t 
             if (sector->remain > LOG_IDX_DATA_SIZE + FDB_WG_ALIGN(tsl.log_len)) {
                 sector->remain -= (LOG_IDX_DATA_SIZE + FDB_WG_ALIGN(tsl.log_len));
             } else {
-                FDB_INFO("Error: this TSL (0x%08" PRIX32 ") size (%" PRIu32 ") is out of bound.\n", tsl.addr.index, tsl.log_len);
+                FDB_INFO("Error: this TSL (0x%08" PRIX32 ") size (%" PRIu32 ") is out of bound.\r\n", tsl.addr.index, tsl.log_len);
                 sector->remain = 0;
                 result = FDB_READ_ERR;
                 break;
@@ -389,14 +389,14 @@ static fdb_err_t tsl_append(fdb_tsdb_t db, fdb_blob_t blob, fdb_time_t *timestam
     /* check the append length, MUST less than the db->max_len */
     if(blob->size > db->max_len)
     {
-        FDB_INFO("Warning: append length (%" PRIdMAX ") is more than the db->max_len (%" PRIdMAX "). This tsl will be dropped.\n", 
+        FDB_INFO("Warning: append length (%" PRIdMAX ") is more than the db->max_len (%" PRIdMAX "). This tsl will be dropped.\r\n", 
                 (intmax_t)blob->size, (intmax_t)(db->max_len));
         return FDB_WRITE_ERR;
     }
 
     /* check the current timestamp, MUST more than the last save timestamp */
     if (cur_time <= db->last_time) {
-        FDB_INFO("Warning: current timestamp (%" PRIdMAX ") is less than or equal to the last save timestamp (%" PRIdMAX "). This tsl will be dropped.\n",
+        FDB_INFO("Warning: current timestamp (%" PRIdMAX ") is less than or equal to the last save timestamp (%" PRIdMAX "). This tsl will be dropped.\r\n",
                 (intmax_t )cur_time, (intmax_t )(db->last_time));
         return FDB_WRITE_ERR;
     }
@@ -437,7 +437,7 @@ fdb_err_t fdb_tsl_append(fdb_tsdb_t db, fdb_blob_t blob)
     fdb_err_t result = FDB_NO_ERR;
 
     if (!db_init_ok(db)) {
-        FDB_INFO("Error: TSL (%s) isn't initialize OK.\n", db_name(db));
+        FDB_INFO("Error: TSL (%s) isn't initialize OK.\r\n", db_name(db));
         return FDB_INIT_FAILED;
     }
 
@@ -461,7 +461,7 @@ fdb_err_t fdb_tsl_append_with_ts(fdb_tsdb_t db, fdb_blob_t blob, fdb_time_t time
     fdb_err_t result = FDB_NO_ERR;
 
     if (!db_init_ok(db)) {
-        FDB_INFO("Error: TSL (%s) isn't initialize OK.\n", db_name(db));
+        FDB_INFO("Error: TSL (%s) isn't initialize OK.\r\n", db_name(db));
         return FDB_INIT_FAILED;
     }
 
@@ -486,7 +486,7 @@ void fdb_tsl_iter(fdb_tsdb_t db, fdb_tsl_cb cb, void *arg)
     struct fdb_tsl tsl;
 
     if (!db_init_ok(db)) {
-        FDB_INFO("Error: TSL (%s) isn't initialize OK.\n", db_name(db));
+        FDB_INFO("Error: TSL (%s) isn't initialize OK.\r\n", db_name(db));
     }
 
     if (cb == NULL) {
@@ -536,7 +536,7 @@ void fdb_tsl_iter_reverse(fdb_tsdb_t db, fdb_tsl_cb cb, void *cb_arg)
     struct fdb_tsl tsl;
 
     if (!db_init_ok(db)) {
-        FDB_INFO("Error: TSL (%s) isn't initialize OK.\n", db_name(db));
+        FDB_INFO("Error: TSL (%s) isn't initialize OK.\r\n", db_name(db));
     }
 
     if (cb == NULL) {
@@ -625,7 +625,7 @@ void fdb_tsl_iter_by_time(fdb_tsdb_t db, fdb_time_t from, fdb_time_t to, fdb_tsl
     uint32_t (*get_tsl_addr)(tsdb_sec_info_t , fdb_tsl_t);
 
     if (!db_init_ok(db)) {
-        FDB_INFO("Error: TSL (%s) isn't initialize OK.\n", db_name(db));
+        FDB_INFO("Error: TSL (%s) isn't initialize OK.\r\n", db_name(db));
     }
 
     if(from <= to) {
@@ -720,7 +720,7 @@ size_t fdb_tsl_query_count(fdb_tsdb_t db, fdb_time_t from, fdb_time_t to, fdb_ts
     arg.status = status;
 
     if (!db_init_ok(db)) {
-        FDB_INFO("Error: TSL (%s) isn't initialize OK.\n", db_name(db));
+        FDB_INFO("Error: TSL (%s) isn't initialize OK.\r\n", db_name(db));
         return 0;
     }
 
@@ -773,14 +773,14 @@ static bool check_sec_hdr_cb(tsdb_sec_info_t sector, void *arg1, void *arg2)
     fdb_tsdb_t db = arg->db;
 
     if (!sector->check_ok) {
-        FDB_INFO("Sector (0x%08" PRIX32 ") header info is incorrect.\n", sector->addr);
+        FDB_INFO("Sector (0x%08" PRIX32 ") header info is incorrect.\r\n", sector->addr);
         (arg->check_failed) = true;
         return true;
     } else if (sector->status == FDB_SECTOR_STORE_USING) {
         if (db->cur_sec.addr == FDB_DATA_UNUSED) {
             memcpy(&db->cur_sec, sector, sizeof(struct tsdb_sec_info));
         } else {
-            FDB_INFO("Warning: Sector status is wrong, there are multiple sectors in use.\n");
+            FDB_INFO("Warning: Sector status is wrong, there are multiple sectors in use.\r\n");
             (arg->check_failed) = true;
             return true;
         }
@@ -815,7 +815,7 @@ static void tsl_format_all(fdb_tsdb_t db)
     /* read the current using sector info */
     read_sector_info(db, db->cur_sec.addr, &db->cur_sec, false);
 
-    FDB_INFO("All sector format finished.\n");
+    FDB_INFO("All sector format finished.\r\n");
 }
 
 /**
@@ -975,7 +975,7 @@ fdb_err_t fdb_tsdb_init(fdb_tsdb_t db, const char *name, const char *path, fdb_g
             db_oldest_addr(db) = latest_addr + db_sec_size(db);
         }
     }
-    FDB_DEBUG("TSDB (%s) oldest sectors is 0x%08" PRIX32 ", current using sector is 0x%08" PRIX32 ".\n", db_name(db), db_oldest_addr(db),
+    FDB_DEBUG("TSDB (%s) oldest sectors is 0x%08" PRIX32 ", current using sector is 0x%08" PRIX32 ".\r\n", db_name(db), db_oldest_addr(db),
             db->cur_sec.addr);
     /* read the current using sector info */
     read_sector_info(db, db->cur_sec.addr, &db->cur_sec, true);

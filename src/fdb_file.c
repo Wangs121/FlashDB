@@ -28,7 +28,7 @@ static void get_db_file_path(fdb_db_t db, uint32_t addr, char *path, size_t size
     snprintf(file_name, sizeof(file_name), "%.*s.fdb.%d", DB_NAME_MAX, db->name, index);
     if (strlen(db->storage.dir) + 1 + strlen(file_name) >= size) {
         /* path is too long */
-        FDB_INFO("Error: db (%s) file path (%s) is too log.\n", file_name, db->storage.dir);
+        FDB_INFO("Error: db (%s) file path (%s) is too log.\r\n", file_name, db->storage.dir);
         FDB_ASSERT(0)
     }
     snprintf(path, size, "%s/%s", db->storage.dir, file_name);
@@ -101,7 +101,7 @@ static int open_db_file(fdb_db_t db, uint32_t addr, bool clean)
             /* clean the old file */
             int clean_fd = open(path, O_RDWR | O_CREAT | O_TRUNC, 0777);
             if (clean_fd <= 0) {
-                FDB_INFO("Error: open (%s) file failed.\n", path);
+                FDB_INFO("Error: open (%s) file failed.\r\n", path);
             }
             else {
                 close(clean_fd);
@@ -240,7 +240,7 @@ static FILE *open_db_file(fdb_db_t db, uint32_t addr, bool clean)
             /* clean the old file */
             FILE *clean_fd = fopen(path, "wb+");
             if (clean_fd == NULL) {
-                FDB_INFO("Error: open (%s) file failed.\n", path);
+                FDB_INFO("Error: open (%s) file failed.\r\n", path);
             } else {
                 fclose(clean_fd);
                 clean_fd = NULL;

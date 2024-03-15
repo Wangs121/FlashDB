@@ -78,7 +78,7 @@ extern "C" {
 #define FDB_ASSERT(EXPR)                                                      \
 if (!(EXPR))                                                                  \
 {                                                                             \
-    FDB_INFO("(%s) has assert failed at %s.\n", #EXPR, __func__);             \
+    FDB_INFO("(%s) has assert failed at %s.\r\n", #EXPR, __func__);             \
     while (1);                                                                \
 }
 #endif /* FDB_ASSERT */

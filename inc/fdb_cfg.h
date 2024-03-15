@@ -21,7 +21,7 @@
 #endif
 
 /* using TSDB (Time series database) feature */
-#define FDB_USING_TSDB
+// #define FDB_USING_TSDB
 
 /* Using FAL storage mode */
 #define FDB_USING_FAL_MODE
@@ -29,7 +29,7 @@
 #ifdef FDB_USING_FAL_MODE
 /* the flash write granularity, unit: bit
  * only support 1(nor flash)/ 8(stm32f2/f4)/ 32(stm32f1)/ 64(stm32f7)/ 128(stm32h5) */
-#define FDB_WRITE_GRAN                /* @note you must define it for a value */
+#define FDB_WRITE_GRAN         1      
 #endif
 
 /* Using file storage mode by LIBC file API, like fopen/fread/fwrte/fclose */
@@ -45,6 +45,6 @@
 /* #define FDB_PRINT(...)              my_printf(__VA_ARGS__) */
 
 /* print debug information */
-#define FDB_DEBUG_ENABLE
+// #define FDB_DEBUG_ENABLE
 
 #endif /* _FDB_CFG_H_ */
