@@ -11,6 +11,7 @@
 
 #ifndef _FDB_DEF_H_
 #define _FDB_DEF_H_
+#include "sys.h"
 
 #ifdef FDB_USING_NATIVE_ASSERT
 #include <assert.h>
@@ -58,7 +59,7 @@ extern "C" {
 
 /* log function. default FDB_PRINT macro is printf() */
 #ifndef FDB_PRINT
-#define FDB_PRINT(...)                 printf(__VA_ARGS__)
+#define FDB_PRINT(...)                 DEBUG_PRINT(__VA_ARGS__)
 #endif
 #define FDB_LOG_PREFIX1()              FDB_PRINT("[FlashDB]" FDB_LOG_TAG)
 #define FDB_LOG_PREFIX2()              FDB_PRINT(" ")
