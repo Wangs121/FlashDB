@@ -102,7 +102,7 @@ fdb_err_t _fdb_init_ex(fdb_db_t db, const char *name, const char *path, fdb_db_t
 void _fdb_init_finish(fdb_db_t db, fdb_err_t result)
 {
     static bool log_is_show = false;
-    if (result == FDB_NO_ERR) {
+    if (result == FDB_NO_ERR || result == FDB_SECTOR_HEAD_ERROR) {
         db->init_ok = true;
         if (!log_is_show) {
             // FDB_INFO("FlashDB V%s is initialize success.\n", FDB_SW_VERSION);

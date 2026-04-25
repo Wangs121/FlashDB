@@ -134,6 +134,7 @@ typedef enum {
     FDB_KV_NAME_EXIST,
     FDB_SAVED_FULL,
     FDB_INIT_FAILED,
+    FDB_SECTOR_HEAD_ERROR,
 } fdb_err_t;
 
 enum fdb_kv_status {

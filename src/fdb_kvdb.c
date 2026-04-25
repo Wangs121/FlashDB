@@ -1667,6 +1667,7 @@ static fdb_err_t _fdb_kv_load(fdb_kvdb_t db)
     if (check_failed_count == SECTOR_NUM) {
         FDB_INFO("All sector header is incorrect. Set it to default.\n");
         fdb_kv_set_default(db);
+        result = FDB_SECTOR_HEAD_ERROR;
     }
 
     /* check all sector header for recovery GC */
@@ -1821,7 +1822,7 @@ fdb_err_t fdb_kvdb_init(fdb_kvdb_t db, const char *name, const char *path, struc
     
     db_lock(db);
 #ifdef FDB_KV_AUTO_UPDATE
-    if (result == FDB_NO_ERR) {
+    if (result == FDB_NO_ERR || result == FDB_SECTOR_HEAD_ERROR) {
         kv_auto_update(db);
     }
 #endif
